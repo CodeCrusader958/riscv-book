@@ -177,25 +177,230 @@ Successful execution confirmed that the simulator had been installed correctly.
 
 ---
 
-## Proxy Kernel Compatibility Issue
+# Chapter 3: Installing the RISC-V Toolchain and Running Programs on Spike
 
-The book executes compiled programs using the Proxy Kernel (`pk`) with the following command:
+## Objective
 
-```bash
-spike pk hello
-```
-
-During this demonstration, the latest version of the Proxy Kernel could not be successfully compiled because it requires the **Zicsr** extension, whereas the toolchain was configured for the base **RV32I** instruction set as specified in the book.
-
-Compilation produced errors similar to:
-
-```text
-Error: extension 'zicsr' required
-```
-
-This issue is caused by compatibility differences between the 2022 edition of the book and the latest RISC-V software ecosystem. The toolchain, compiler, Spike simulator, ELF generation, and assembly generation all functioned correctly, while only the execution through the latest Proxy Kernel remained incompatible.
+The objective of this chapter was to set up a complete RISC-V software development environment and successfully compile, disassemble, and execute a RISC-V program using the Spike ISA simulator and Proxy Kernel (pk).
 
 ---
+
+# Development Environment
+
+| Component | Details |
+|-----------|---------|
+| Operating System | Ubuntu 22.04 (VirtualBox) |
+| Compiler | riscv32-unknown-elf-gcc 16.1.0 |
+| ISA Simulator | Spike |
+| Proxy Kernel | riscv-pk |
+| Architecture | RV32I + Zicsr + Zifencei |
+| ABI | ilp32 |
+
+---
+
+# Repository
+
+```
+goossens-book-ip-projects/2022.1/chapter_3
+```
+
+---
+
+# Toolchain Verification
+
+Verify that the RISC-V compiler is installed correctly.
+
+```bash
+riscv32-unknown-elf-gcc --version
+```
+
+Example Output
+
+```
+riscv32-unknown-elf-gcc (g6afcc4f6d) 16.1.0
+```
+
+---
+
+# Compiling the Program
+
+Compile the sample C program.
+
+```bash
+cd ~/goossens-book-ip-projects/2022.1/chapter_3
+
+riscv32-unknown-elf-gcc -o hello hello.c
+```
+
+This generates a 32-bit RISC-V executable named `hello`.
+
+---
+
+# Generating Assembly
+
+Generate the assembly source produced by the compiler.
+
+```bash
+riscv32-unknown-elf-gcc -S hello.c
+```
+
+Output
+
+```
+hello.s
+```
+
+---
+
+# Generating Disassembly
+
+Generate the machine-code disassembly.
+
+```bash
+riscv32-unknown-elf-objdump -D hello > hello.dump
+```
+
+The disassembly file contains the generated RISC-V instructions.
+
+---
+
+# Building Spike and Proxy Kernel
+
+Spike and the Proxy Kernel (pk) were compiled from source.
+
+During compilation of the latest versions, additional RISC-V ISA extensions were required.
+
+Required ISA extensions:
+
+- Zicsr
+- Zifencei
+
+The Proxy Kernel was configured for:
+
+```
+Architecture : RV32I + Zicsr + Zifencei
+ABI          : ilp32
+```
+
+---
+
+# Running the Program on Spike
+
+Execute the compiled program using Spike and the Proxy Kernel.
+
+```bash
+spike --isa=RV32IZicsr_Zifencei \
+~/riscv-pk/build/pk \
+hello
+```
+
+Output
+
+```
+hello world
+```
+
+---
+
+# Verification
+
+Executable information
+
+```bash
+file hello
+```
+
+Output
+
+```
+ELF 32-bit LSB executable
+UCB RISC-V
+Statically linked
+```
+
+Verify the executable architecture.
+
+```bash
+riscv32-unknown-elf-readelf -h hello
+```
+
+Output
+
+```
+Machine: RISC-V
+```
+
+---
+
+# Workflow
+
+```
+hello.c
+     │
+     ▼
+riscv32-unknown-elf-gcc
+     │
+     ▼
+hello (ELF Executable)
+     │
+     ▼
+Proxy Kernel (pk)
+     │
+     ▼
+Spike ISA Simulator
+     │
+     ▼
+Program Output
+```
+
+---
+
+# Files Generated
+
+```
+hello
+hello.s
+hello.dump
+```
+
+---
+
+# Learning Outcomes
+
+- Installed the RISC-V GNU Toolchain.
+- Cross-compiled C programs for the RISC-V architecture.
+- Generated assembly code using GCC.
+- Generated instruction-level disassembly using objdump.
+- Built the Spike ISA Simulator.
+- Built the RISC-V Proxy Kernel (pk).
+- Executed a 32-bit RISC-V program using Spike.
+
+---
+
+# Challenges Faced
+
+### Proxy Kernel Build Failure
+
+While building the latest version of `riscv-pk`, the following errors occurred:
+
+```
+extension 'zicsr' required
+extension 'zifencei' required
+```
+
+These were resolved by configuring the Proxy Kernel with the required ISA extensions:
+
+```
+RV32I + Zicsr + Zifencei
+```
+
+After rebuilding, the Proxy Kernel compiled successfully.
+
+---
+
+# Conclusion
+
+The complete RISC-V software development environment was successfully established. A C program was cross-compiled into a 32-bit RISC-V executable, disassembled for instruction-level analysis, and executed successfully on the Spike ISA simulator using the Proxy Kernel.
 
 # Chapter 3 Summary
 
