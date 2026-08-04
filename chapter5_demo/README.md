@@ -96,16 +96,6 @@ Pipeline optimization is intentionally disabled to implement a simple sequential
 
 ---
 
-## Top-Level Source Code
-
-> **Screenshot Placeholder**
-
-```text
-[ Insert fetching_ip.cpp Screenshot ]
-```
-
----
-
 # C Simulation
 
 C Simulation verifies the functional behavior of the C++ design before hardware synthesis.
@@ -129,11 +119,9 @@ A successful simulation confirms that the Fetch IP operates correctly before RTL
 
 ## C Simulation Output
 
-> **Screenshot Placeholder**
 
-```text
-[ Insert C Simulation Console Screenshot ]
-```
+![C Simulation](screenshots/fetching_ip_csim_log.png)
+![C Simulation](screenshots/cosimulation_report.png)
 
 ---
 
@@ -155,12 +143,8 @@ The generated RTL preserves the behavior verified during C Simulation while opti
 
 ## C Synthesis Report
 
-> **Screenshot Placeholder**
-
-```text
-[ Insert C Synthesis Report Screenshot ]
-```
-
+![C Simulation](screenshots/synthesis_summary.png)
+![C Simulation](screenshots/synthesis_summary_2.png)
 ---
 
 # Key Observations
@@ -204,11 +188,7 @@ The hierarchy illustrates how Vitis HLS partitions the C++ implementation into i
 
 ## Function Call Graph
 
-> **Screenshot Placeholder**
-
-```text
-[ Insert Function Call Graph Screenshot ]
-```
+![C Simulation](screenshots/function_call_graph.png)
 
 ---
 
@@ -254,11 +234,7 @@ The Schedule Viewer confirms that the Fetch, Execute, and Running Condition stag
 
 ## Schedule Viewer
 
-> **Screenshot Placeholder**
-
-```text
-[ Insert Schedule Viewer Screenshot ]
-```
+![C Simulation](screenshots/schedule_viewer.png)
 
 ---
 
@@ -301,17 +277,6 @@ Automatically generated control registers include:
 - IP_ISR
 
 The software arguments `start_pc` and `code_ram` are automatically mapped into hardware registers and memory interfaces.
-
----
-
-## Synthesis Summary
-
-> **Screenshot Placeholder**
-
-```text
-[ Insert Synthesis Summary Screenshot ]
-```
-
 ---
 
 # RTL Export
@@ -326,17 +291,7 @@ Exporting RTL performs the following tasks:
 - Generates IP configuration files
 - Enables integration into Vivado IP Integrator
 
-The exported IP can subsequently be instantiated in Vivado-based FPGA designs.
-
----
-
-## RTL Export
-
-> **Screenshot Placeholder**
-
-```text
-[ Insert RTL Export Screenshot ]
-```
+The exported IP can subsequently be instantiated in Vivado-based FPGA designs. It is in the files of this repository
 
 ---
 
